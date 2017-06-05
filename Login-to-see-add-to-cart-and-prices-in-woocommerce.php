@@ -43,7 +43,7 @@ function hatc_login_error_notice() {
   if( !class_exists('woocommerce')) {
     ?>
     <div class="error notice">
-        <p><?php _e( 'IC Hide add to Cart and prices require WooCommerce, activate WooCommerce to use this plugin', 'hatc_login_plugin' ); ?></p>
+        <p><?php _e( 'Login to see add to cart and prices plugin require WooCommerce, activate WooCommerce to use this plugin', 'hatc_login_plugin' ); ?></p>
     </div>
     <?php
   }
@@ -63,7 +63,7 @@ $checkbox_allproducts = isset(get_option('ic_settings')['hatc_login_checkbox_fie
 	
  if ($checkbox_allproducts == '1' && !is_user_logged_in())   {
 	 
- function hatc_login_product_is_purchasable( $purchasable ){
+ function hatc_login_product_is_purchasable( $purchasable ) {
 	
         $purchasable = false;
     return $purchasable;
@@ -129,7 +129,7 @@ function hatc_login_remove_prices( $price, $product ) {
  
   } else {
 	
-  	$price = __('The price is avaiable when logged in.','hatc_login_plugin');
+  	$price = __('Login to see the prices','hatc_login_plugin');
 
   return $price;
   }
@@ -143,7 +143,6 @@ add_filter( 'woocommerce_get_price_html', 'hatc_login_remove_prices', 10, 2 );
 
  
 }
-
 
 
 ?>
