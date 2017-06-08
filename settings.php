@@ -176,16 +176,24 @@ function hatc_login_options_page() {
 	<?php
 }
 
-// Footer admin custom text 
+// Footer admin custom text for plugin page
 
 function hatc_login_footer_admin_text () {
 	
 $text = sprintf( __( 'Thank you for creating with <a href="%s">WordPress</a>.' ), __( 'https://wordpress.org/' ) );	
+	
+  $current_screen = get_current_screen();
 
-$custom_footer_text = __('Thanks for using <b>Login to see add to cart and prices in WooCommerce</b>','hatc_login_plugin');
+    if( $current_screen ->id === "woocommerce_page_login_to_see_add_to_cart_prices" ) {
+
+		$custom_footer_text = __('Thanks for using <b>Login to see add to cart and prices in WooCommerce</b>','hatc_login_plugin');
+	
 	
 	return $text . ' | ' . $custom_footer_text;
 
+	}
+
+  return $text;	
 }
 
 add_filter('admin_footer_text', 'hatc_login_footer_admin_text');
