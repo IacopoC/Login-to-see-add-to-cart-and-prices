@@ -32,7 +32,7 @@ if (! defined('ABSPATH')) {
 
 include_once(ABSPATH . 'wp-includes/pluggable.php');
 
-// add settings page
+// Add settings page
 
 require ('settings.php');
 
@@ -85,7 +85,8 @@ function hatc_login_add_to_cart_option() {
 	$myaccount_page_url = get_permalink( get_option( 'woocommerce_myaccount_page_id' ) );
   
 
-	// cases if one of the two fields are empty or both	
+// cases if one of the two fields are empty or both	
+	
 	if($custom_message !== '' && $custom_page_url !=='') {
 	
     	echo '<a class="button wltspab_custom_login_link" href="' . $custom_page_url . '">' . $custom_message . '</a>';
@@ -105,7 +106,7 @@ function hatc_login_add_to_cart_option() {
 	} 
 }        
 
-add_action( 'woocommerce_after_single_product_summary', 'hatc_login_add_to_cart_option', 10, 0 ); 
+add_action( 'woocommerce_single_product_summary', 'hatc_login_add_to_cart_option', 10, 0 ); 
 add_filter( 'woocommerce_loop_add_to_cart_link', 'hatc_login_add_to_cart_option' );	 
 
  }
@@ -143,6 +144,7 @@ add_filter( 'woocommerce_get_price_html', 'hatc_login_remove_prices', 10, 2 );
 
  
 }
+
 
 
 ?>
