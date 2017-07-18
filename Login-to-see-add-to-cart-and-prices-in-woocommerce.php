@@ -28,6 +28,7 @@ if (! defined('ABSPATH')) {
     exit();
 }
 
+
 // Include pluggable.php to use the is_user_logged_in function
 
 include_once(ABSPATH . 'wp-includes/pluggable.php');
@@ -43,18 +44,18 @@ function hatc_login_error_notice() {
   if( !class_exists('woocommerce')) {
     ?>
     <div class="error notice">
-        <p><?php _e( 'Login to see add to cart and prices plugin require WooCommerce, activate WooCommerce to use this plugin', 'hatc_login_plugin' ); ?></p>
+        <p><?php _e( 'Login to see add to cart and prices plugin requires WooCommerce, please activate WooCommerce to use this plugin', 'hatc_login_plugin' ); ?></p>
     </div>
     <?php
   }
 }
 add_action( 'admin_notices', 'hatc_login_error_notice' );
 
-// Check if WooCommerce is active or if WooCommerce Multisite configuration is enabled
+// Check if WooCommerce is active 
 
-if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) || array_key_exists('woocommerce/woocommerce.php', get_site_option('active_sitewide_plugins')) ) {
+if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+
 	
-
 
 // Deactivate WooCommerce buttons for every product for guest costumers
 
@@ -78,37 +79,26 @@ function hatc_login_add_to_cart_option() {
 	
 	$custom_message = get_option('ic_settings')['hatc_login_text_field_0'];
 	
-	$default_message = __('Login to see add to cart','hatc_login_plugin');
+	$default_message = __('Login first','hatc_login_plugin');
 	
-	$custom_page_url = get_option('ic_settings')['hatc_login_text_field_1'];
-	
-	$myaccount_page_url = get_permalink( get_option( 'woocommerce_myaccount_page_id' ) );
+	$custom_page_url = get_option('ic_settings')['hatc_login_select_field_1'];
   
-
-// cases if one of the two fields are empty or both	
 	
-	if($custom_message !== '' && $custom_page_url !=='') {
+	if($custom_message !== '') {
 	
     	echo '<a class="button wltspab_custom_login_link" href="' . $custom_page_url . '">' . $custom_message . '</a>';
 		
-	} elseif ($custom_message == '' && $custom_page_url !=='')  {
+	} else {
 	
 		echo '<a class="button wltspab_custom_login_link" href="' . $custom_page_url . '">' . $default_message . '</a>';
 		
-	} elseif ($custom_page_url == '' && $custom_message !== '') {
-		
-		echo '<a class="button wltspab_custom_login_link" href="' . $myaccount_page_url . '">' . $custom_message . '</a>';
-		
-	} else {
-		
-		echo '<a class="button wltspab_custom_login_link" href="' . $myaccount_page_url . '">' . $default_message . '</a>';
-		
 	} 
+	 
 }        
 
 add_action( 'woocommerce_single_product_summary', 'hatc_login_add_to_cart_option', 10, 0 ); 
 add_filter( 'woocommerce_loop_add_to_cart_link', 'hatc_login_add_to_cart_option' );	 
-
+	 
  }
 
 // Hide prices in WooCommerce
@@ -130,7 +120,7 @@ function hatc_login_remove_prices( $price, $product ) {
  
   } else {
 	
-  	$price = __('Login to see the prices','hatc_login_plugin');
+  	$price = __('Login to see prices','hatc_login_plugin');
 
   return $price;
   }
@@ -145,6 +135,3 @@ add_filter( 'woocommerce_get_price_html', 'hatc_login_remove_prices', 10, 2 );
  
 }
 
-
-
-?>
