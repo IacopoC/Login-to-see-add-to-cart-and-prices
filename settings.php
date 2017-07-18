@@ -1,6 +1,5 @@
 <?php
 
-
 if (! defined('ABSPATH')) {
     exit();
 }
@@ -21,21 +20,21 @@ function hatc_login_add_admin_menu() {
 
 function hatc_login_settings_init() { 
 
-	register_setting( 'pluginPage', 'ic_settings' );
+	register_setting( 'pluginPage_option', 'ic_settings' );
 
 	add_settings_section(
-		'ic_pluginPage_section', 
+		'hatc_pluginPage_section', 
 		__( 'Settings of the plugin', 'hatc_login_plugin' ), 
 		'hatc_login_settings_section_callback', 
-		'pluginPage'
+		'pluginPage_option'
 	);
 
 	add_settings_field( 
 		'hatc_login_checkbox_field_0', 
-		__( 'Turn off WooCommerce for guest costumers', 'hatc_login_plugin' ), 
+		__( 'Hide add to cart buttons for guest costumers', 'hatc_login_plugin' ), 
 		'hatc_login_checkbox_field_0_render', 
-		'pluginPage', 
-		'ic_pluginPage_section' 
+		'pluginPage_option', 
+		'hatc_pluginPage_section' 
 	);
 
 		
@@ -43,17 +42,17 @@ function hatc_login_settings_init() {
 		'hatc_login_text_field_0', 
 		__( 'Personalized text for add to cart button for guests', 'hatc_login_plugin' ), 
 		'hatc_login_text_field_0_render', 
-		'pluginPage', 
-		'ic_pluginPage_section' 
+		'pluginPage_option', 
+		'hatc_pluginPage_section' 
 	);
 	
 	
 	add_settings_field( 
-		'hatc_login_text_field_1', 
-		__( 'Personalized link for add to cart button for guests', 'hatc_login_plugin' ), 
-		'hatc_login_text_field_1_render', 
-		'pluginPage', 
-		'ic_pluginPage_section' 
+		'hatc_login_select_field_1', 
+		__( 'Redirect guest costumers to a page', 'hatc_login_plugin' ), 
+		'hatc_login_select_field_1_render', 
+		'pluginPage_option', 
+		'hatc_pluginPage_section' 
 	);
 
 
@@ -61,8 +60,8 @@ function hatc_login_settings_init() {
 		'hatc_login_checkbox_field_3', 
 		__( 'Turn off products prices for guests', 'hatc_login_plugin' ), 
 		'hatc_login_checkbox_field_3_render', 
-		'pluginPage', 
-		'ic_pluginPage_section' 
+		'pluginPage_option', 
+		'hatc_pluginPage_section' 
 	);
 
 	
@@ -70,8 +69,8 @@ function hatc_login_settings_init() {
 		'hatc_login_text_field_2', 
 		__( 'Personalized text for prices field for guests', 'hatc_login_plugin' ), 
 		'hatc_login_text_field_2_render', 
-		'pluginPage', 
-		'ic_pluginPage_section' 
+		'pluginPage_option', 
+		'hatc_pluginPage_section' 
 	);
 
 }
@@ -90,7 +89,7 @@ function hatc_login_checkbox_field_0_render() {
 
 function hatc_login_text_field_0_render() { 
 	
-	$default_message = __('Login to see add to cart','hatc_login_plugin');
+	$default_message = __('Login first','hatc_login_plugin');
 
 	$options = get_option( 'ic_settings' );
 	?>
@@ -99,21 +98,25 @@ function hatc_login_text_field_0_render() {
 
 }
 
-function hatc_login_text_field_1_render() { 
+// Dropdown menu for link in Add to Cart buttons
+
+function hatc_login_select_field_1_render() { 
 
 	$options = get_option( 'ic_settings' );
-	
-	$myaccount_page_id = get_option( 'woocommerce_myaccount_page_id' );
-	$myaccount_page_url = get_permalink( $myaccount_page_id );
-	
 	?>
-	<input type='text' class='regular-text' name='ic_settings[hatc_login_text_field_1]' value='<?php if(isset($options['hatc_login_text_field_1'])) { echo $options['hatc_login_text_field_1']; } ?>' placeholder='<?php echo $myaccount_page_url; ?>'>
-	<?php
+	<select name='ic_settings[hatc_login_select_field_1]'>
+	<?php $pages = get_pages(); ?>
+		<option value="" selected><?php _e('Select a page','hatc_login_plugin');?></option>
+  	<?php foreach ( $pages as $page ): ?>
+		<option value="<?php echo get_page_link( $page->ID ); ?>" <?php if(isset($options['hatc_login_select_field_1'])) {selected( $options['hatc_login_select_field_1'], get_page_link( $page->ID )); }; ?>><?php echo $page->post_title; ?></option>
+		<?php endforeach; ?>
+	</select>
 
+	<?php
 }
 
-
 // Checkbox for hide prices in WooCommerce
+
 function hatc_login_checkbox_field_3_render() { 
 
 	$options = get_option( 'ic_settings' );
@@ -147,7 +150,6 @@ function hatc_login_options_page() {
     if (!current_user_can('manage_options')) {
         return;
     }
- 
     // Add error/update messages
  
     // check if the user have submitted the settings
@@ -160,15 +162,14 @@ function hatc_login_options_page() {
     // Show error/update messages
     settings_errors('hatc_login_messages');
 
-
 	?>
 	<form action='options.php' method='post'>
 
 		<h2>Login to see add to cart and prices in WooCommerce</h2>
 
 		<?php
-		settings_fields( 'pluginPage' );
-		do_settings_sections( 'pluginPage' );
+		settings_fields( 'pluginPage_option' );
+		do_settings_sections( 'pluginPage_option' );
 		submit_button();
 		?>
 
@@ -187,8 +188,7 @@ $text = sprintf( __( 'Thank you for creating with <a href="%s">WordPress</a>.' )
     if( $current_screen ->id === "woocommerce_page_login_to_see_add_to_cart_prices" ) {
 
 		$custom_footer_text = __('Thanks for using <b>Login to see add to cart and prices in WooCommerce</b>','hatc_login_plugin');
-	
-	
+
 	return $text . ' | ' . $custom_footer_text;
 
 	}
