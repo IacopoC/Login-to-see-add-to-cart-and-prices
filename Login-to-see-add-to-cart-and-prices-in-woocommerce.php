@@ -1,13 +1,15 @@
 <?php
 /*
 Plugin Name: Login to see add to cart and prices in WooCommerce
-Plugin URI: 
+Plugin URI: http://iacopocutino.it/login-see-add-cart-prices/
 Description: A simple plugin useful to hide add to cart buttons and prices for not registered users. Requires WooCommerce plugin.
 Author: Iacopo C
-Version: 1.0
+Version: 1.1
 Author URI: http://iacopocutino.it
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
+WC requires at least: 2.1
+WC tested up to: 3.1.2
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -135,3 +137,6 @@ add_filter( 'woocommerce_get_price_html', 'hatc_login_remove_prices', 10, 2 );
  
 }
 
+
+
+?>
