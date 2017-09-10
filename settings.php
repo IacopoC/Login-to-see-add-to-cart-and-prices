@@ -1,5 +1,6 @@
 <?php
 
+
 if (! defined('ABSPATH')) {
     exit();
 }
@@ -78,7 +79,7 @@ function hatc_login_settings_init() {
 // Checkbox for hide WooCommerce add to cart
 function hatc_login_checkbox_field_0_render() { 
 
-	$options = get_option( 'ic_settings' );
+	$options = get_option('ic_settings');
 	?>
 	<input type='checkbox' name='ic_settings[hatc_login_checkbox_field_0]' <?php if(isset($options['hatc_login_checkbox_field_0'])) { checked( $options['hatc_login_checkbox_field_0'], 1 ); } ?> value='1'>
 	<label><?php _e('Check to hide add to cart buttons for guest costumers','hatc_login_plugin') ?></label>
@@ -91,7 +92,7 @@ function hatc_login_text_field_0_render() {
 	
 	$default_message = __('Login first','hatc_login_plugin');
 
-	$options = get_option( 'ic_settings' );
+	$options = get_option('ic_settings');
 	?>
 	<input type='text' class='regular-text' name='ic_settings[hatc_login_text_field_0]' value='<?php if(isset($options['hatc_login_text_field_0'])) { echo $options['hatc_login_text_field_0']; } ?>' placeholder='<?php echo $default_message; ?>'>
 	<?php
@@ -102,7 +103,7 @@ function hatc_login_text_field_0_render() {
 
 function hatc_login_select_field_1_render() { 
 
-	$options = get_option( 'ic_settings' );
+	$options = get_option('ic_settings');
 	?>
 	<select name='ic_settings[hatc_login_select_field_1]'>
 	<?php $pages = get_pages(); ?>
@@ -119,7 +120,7 @@ function hatc_login_select_field_1_render() {
 
 function hatc_login_checkbox_field_3_render() { 
 
-	$options = get_option( 'ic_settings' );
+	$options = get_option('ic_settings');
 	?>
 	<input type='checkbox' name='ic_settings[hatc_login_checkbox_field_3]' <?php if(isset($options['hatc_login_checkbox_field_3'])) { checked( $options['hatc_login_checkbox_field_3'], 1 ); } ?> value='1'>
 	<label><?php _e('Check to hide prices for guest costumers','hatc_login_plugin') ?></label>
@@ -129,7 +130,7 @@ function hatc_login_checkbox_field_3_render() {
 
 function hatc_login_text_field_2_render() { 
 
-	$options = get_option( 'ic_settings' );
+	$options = get_option('ic_settings');
 	?>
 	<input type='text' class='regular-text' name='ic_settings[hatc_login_text_field_2]' value='<?php if(isset($options['hatc_login_text_field_2'])) { echo $options['hatc_login_text_field_2']; } ?>' placeholder='Login to see prices'>
 	<?php
@@ -165,11 +166,11 @@ function hatc_login_options_page() {
 	?>
 	<form action='options.php' method='post'>
 
-		<h2>Login to see add to cart and prices in WooCommerce</h2>
+		<h2><?php _e('Login to see add to cart and prices in WooCommerce','hatc_login_plugin') ?></h2>
 
 		<?php
-		settings_fields( 'pluginPage_option' );
-		do_settings_sections( 'pluginPage_option' );
+		settings_fields('pluginPage_option');
+		do_settings_sections('pluginPage_option');
 		submit_button();
 		?>
 
@@ -180,20 +181,20 @@ function hatc_login_options_page() {
 // Footer admin custom text for plugin page
 
 function hatc_login_footer_admin_text () {
-	
-$text = sprintf( __( 'Thank you for creating with <a href="%s">WordPress</a>.' ), __( 'https://wordpress.org/' ) );	
+		
 	
   $current_screen = get_current_screen();
 
     if( $current_screen ->id === "woocommerce_page_login_to_see_add_to_cart_prices" ) {
 
-		$custom_footer_text = __('Thanks for using <b>Login to see add to cart and prices in WooCommerce</b>','hatc_login_plugin');
 
-	return $text . ' | ' . $custom_footer_text;
+	$custom_footer_text = sprintf(__('Thanks for using <a href="%s" target="_blank">Login to see add to cart and prices in WooCommerce</a>','hatc_login_plugin'), __('https://wordpress.org/plugins/login-to-see-add-to-cart-and-prices-in-woocommerce/'));
+
+	return $custom_footer_text;
 
 	}
 
-  return $text;	
 }
 
 add_filter('admin_footer_text', 'hatc_login_footer_admin_text');
+
