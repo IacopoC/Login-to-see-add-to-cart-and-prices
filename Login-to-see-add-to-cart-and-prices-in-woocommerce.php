@@ -1,15 +1,15 @@
 <?php
 /*
-Plugin Name: Login to see add to cart and prices in WooCommerce
+Plugin Name: Login to See Add to Cart and Prices in WooCommerce
 Plugin URI: http://iacopocutino.it/login-see-add-cart-prices/
-Description: A simple plugin useful to hide add to cart buttons and prices for not registered users. Requires WooCommerce plugin.
+Description: A simple plugin useful to disable add to cart buttons and hide prices for not registered users and invites them to register to your store. Requires WooCommerce plugin.
 Author: Iacopo C
-Version: 1.1
+Version: 2.0
 Author URI: http://iacopocutino.it
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 WC requires at least: 2.1
-WC tested up to: 3.1.2
+WC tested up to: 3.3
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,9 +32,11 @@ if (! defined('ABSPATH')) {
 
 
 // Include pluggable.php to use the is_user_logged_in function
+if(!function_exists('is_user_logged_in')) {
 
-include_once(ABSPATH . 'wp-includes/pluggable.php');
+	include_once(ABSPATH . 'wp-includes/pluggable.php');
 
+}
 // Add settings page
 
 require ('settings.php');
@@ -62,9 +64,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 // Deactivate WooCommerce buttons for every product for guest costumers
 
 
-$checkbox_allproducts = isset(get_option('ic_settings')['hatc_login_checkbox_field_0']);
+$checkbox_allproducts = get_option('checkbox_hide_add_cart');
 	
- if ($checkbox_allproducts == '1' && !is_user_logged_in())   {
+ if ($checkbox_allproducts == 'yes' && !is_user_logged_in())   { 
 	 
  function hatc_login_product_is_purchasable( $purchasable ) {
 	
@@ -79,20 +81,20 @@ add_filter( 'woocommerce_is_purchasable', 'hatc_login_product_is_purchasable', 1
 
 function hatc_login_add_to_cart_option() { 
 	
-	$custom_message = get_option('ic_settings')['hatc_login_text_field_0'];
+	$custom_cart_text = get_option('wc_settings_add_to_cart_text');
 	
-	$default_message = __('Login first','hatc_login_plugin');
+	$cart_default_message = __('Login to buy','hatc_login_plugin');
 	
-	$custom_page_url = get_option('ic_settings')['hatc_login_select_field_1'];
+	$custom_page_url = get_option('option_pages_select');
   
 	
-	if($custom_message !== '') {
+	if($custom_cart_text !== '') {
 	
-    	echo '<a class="button wltspab_custom_login_link" href="' . $custom_page_url . '">' . $custom_message . '</a>';
+    	echo '<a class="button wltspab_custom_login_link" href="' . $custom_page_url . '">' . $custom_cart_text . '</a>';
 		
 	} else {
 	
-		echo '<a class="button wltspab_custom_login_link" href="' . $custom_page_url . '">' . $default_message . '</a>';
+		echo '<a class="button wltspab_custom_login_link" href="' . $custom_page_url . '">' . $cart_default_message . '</a>';
 		
 	} 
 	 
@@ -106,14 +108,14 @@ add_filter( 'woocommerce_loop_add_to_cart_link', 'hatc_login_add_to_cart_option'
 // Hide prices in WooCommerce
 
 
-$checkbox_prices = isset(get_option('ic_settings')['hatc_login_checkbox_field_3']);
+$checkbox_prices = get_option('checkbox_hide_prices');
 
- if ( $checkbox_prices == '1' && !is_user_logged_in()) {
+ if ( $checkbox_prices == 'yes' && !is_user_logged_in()) {
 
  
 function hatc_login_remove_prices( $price, $product ) {
 
-  $custom_price_text = get_option('ic_settings')['hatc_login_text_field_2'];
+  $custom_price_text = get_option('wc_settings_prices_text');
 	
   if ($custom_price_text !=='') {
 	  
